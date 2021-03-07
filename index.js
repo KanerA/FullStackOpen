@@ -27,6 +27,10 @@ const phonebook = [
     }
 ]
 
+app.get('/api/persons', (req, res) => {
+    res.json(phonebook);
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`app is running on port ${PORT}`);
