@@ -26,3 +26,8 @@ const phonebook = [
         number: '054-2585082'
     }
 ]
+
+const PORT = 3001;
+app.listen(PORT, () => {
+    console.log(`app is running on port ${PORT}`);
+});
