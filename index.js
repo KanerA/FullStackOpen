@@ -38,10 +38,16 @@ app.get('/info', (req, res) => {
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id);
     const person = phonebook.find(p => p.id === id);
-    console.log(person);
     if(!person) return res.status(404).send('<h1>ID Not Found</h1>')
     res.json(phonebook[id-1]);
-})
+});
+
+app.delete('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const index = phonebook.findIndex(p => p.id === id);
+    if(index >= 0) phonebook.splice(index, 1);
+    res.json({message: 'success', phonebook: phonebook});
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
