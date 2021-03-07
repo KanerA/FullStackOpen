@@ -51,6 +51,11 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const { body } = req;
+
+    if(!body.name || !body.number) return res.status(400).json({message: "can't add a contact without a name or number"});
+    const person = phonebook.find(p => p.name === body.name);
+    if(person) return res.status(200).json({ error: 'name must be unique' })
+    
     body.id = Math.floor(Math.random() * 1000);
     phonebook.push(body);
     res.json({body: body, message: "success"})
