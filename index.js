@@ -49,6 +49,13 @@ app.delete('/api/persons/:id', (req, res) => {
     res.json({message: 'success', phonebook: phonebook});
 });
 
+app.post('/api/persons', (req, res) => {
+    const { body } = req;
+    body.id = Math.floor(Math.random() * 1000);
+    phonebook.push(body);
+    res.json({body: body, message: "success"})
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`app is running on port ${PORT}`);
