@@ -2,6 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
+const path = require('path');
 const cors = require('cors');
 
 morgan.token('req-body', (req, res) => {
@@ -11,6 +12,7 @@ morgan.token('req-body', (req, res) => {
 app.use(cors())
 app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :req-body'));
+app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
 
 const phonebook = [
     {
@@ -34,6 +36,10 @@ const phonebook = [
         number: '054-2585082'
     }
 ]
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'))
+})
 
 app.get('/api/persons', (req, res) => {
     res.json(phonebook);
