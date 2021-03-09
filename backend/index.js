@@ -58,10 +58,11 @@ app.get('/api/persons/:id', (req, res) => {
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const index = phonebook.findIndex(p => p.id === id);
-    if(index >= 0) phonebook.splice(index, 1);
-    res.json({message: 'success', phonebook: phonebook});
+    Person.findByIdAndRemove(req.params.id)
+    .then(result => {
+        res.status(204).end()
+    })
+    .catch(error => next(error))
 });
 
 app.post('/api/persons', (req, res) => {
