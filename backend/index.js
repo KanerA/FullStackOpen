@@ -15,6 +15,17 @@ app.use(cors())
 app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :req-body'));
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+  
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+    } 
+  
+    next(error)
+  }
+  
+  app.use(errorHandler)
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'))
@@ -34,9 +45,16 @@ app.get('/info', (req, res) => {
 });
 
 app.get('/api/persons/:id', (req, res) => {
-    Person.findById(req.params.id).then(person => {
-        res.json(person)
+    Person.findById(req.params.id)
+    .then(person => {
+        console.log(person);
+        if (person) {
+            res.json(person)
+          } else {
+            res.status(404).end()
+          }
       })
+    .catch(error => next(error))
 });
 
 app.delete('/api/persons/:id', (req, res) => {
