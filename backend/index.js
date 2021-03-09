@@ -82,6 +82,19 @@ app.post('/api/persons', (req, res) => {
     })
 });
 
+app.put('/api/persons/:id', (req, res) => {
+    const body = req.body;
+    const person = {
+        number: body.number,
+    }
+
+    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    .then(updatedPerson => {
+        res.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`app is running on port ${PORT}`);
