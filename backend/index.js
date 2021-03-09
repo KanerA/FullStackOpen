@@ -1,9 +1,11 @@
 "use strict"
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const path = require('path');
 const cors = require('cors');
+const Person = require('../models/person');
 
 morgan.token('req-body', (req, res) => {
     return JSON.stringify(req.body);
@@ -42,7 +44,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-    res.json(phonebook);
+    Person.find({}).then(people => {
+        res.json(people);
+    })
 });
 
 app.get('/info', (req, res) => {
@@ -75,7 +79,7 @@ app.post('/api/persons', (req, res) => {
     res.json({body: body, message: "success"})
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`app is running on port ${PORT}`);
 });
